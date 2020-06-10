@@ -38,6 +38,108 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+  uint64_t N=0;
+  if(args==NULL) { N=1; }//The args not provided
+  else {
+       sscanf(args,"%llu",&N);
+       if(N==0) {
+	       printf("Args error in cmd_si\n"); 
+	       return 0;
+       }//Error if transformed args minus
+  } 
+  cpu_exec(N);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  if(args==NULL) {
+	  printf("Args error in cmd_info\n");
+	  return 0;
+  }//The args not provided
+  if(*args=='r') {
+    int i;
+    printf("eip, 0x%x\n",cpu.eip);//eip register
+    for(i=0;i<8;i++) { printf("%s, 0x%x\n",regsl[i],reg_l(i)); }//32-bits registers
+    for(i=0;i<8;i++) { printf("%s, 0x%x\n",regsw[i],reg_w(i)); }//16-bits registers
+    for(i=0;i<8;i++) { printf("%s, 0x%x\n",regsb[i],reg_b(i)); }//8-bits registers
+    return 0;
+  }
+  else if(*args=='w') {
+    print_wp();
+    return 0;
+  }	  
+  else {
+     printf("Args error in cmd_info\n");
+     return 0;
+  }
+}
+
+static int cmd_x(char *args) {
+  int len=0;
+  char *arg1=strtok(args, " ");//extract first parameter
+  //printf("%s",arg1);
+  int n=sscanf(arg1,"%d",&len);
+  if(n<=0) {
+	  printf("Arg1 error in cmd_x\n");
+	  return 0;
+  }
+  arg1=strtok(NULL," ");//extract second parameter
+  //printf("%s",arg1);
+  bool flag;
+  vaddr_t addr=expr(arg1,&flag);
+  if(flag==false) {
+    printf("Expr error in cmd_x\n");
+   }
+  else {
+    printf("Memory:\n");
+    int i=0;
+    for(i=0;i<len;i++) {
+	   printf("0x%x: 0x%08x\n",addr+4*i, vaddr_read(addr+4*i,4));//print 4 consecutive bytes
+	  }
+  }
+  printf("\n");
+  return 0;
+}
+
+static int cmd_p(char *args) {//the value of expr
+  bool flag;
+  // printf("0x08%x\n",expr(args,&flag));
+  int val=expr(args,&flag);//the value of expr
+  if(flag==false) {
+    printf("Expr error in cmd_p\n");
+  }
+  else {
+    printf("The value of expr is:%d\n",val);
+  }
+  return 0;
+}
+
+static int cmd_w(char *args) {//create the watchpoint 
+  int n= new_wp(args);
+  if(n==0) {
+    printf("Creating watchpoint error in cmd_w\n");
+  }
+  return 0;
+}
+
+static int cmd_d(char *args) {//delete the watchpoint
+  int N=0;
+  int n1=sscanf(args,"%d",&N);
+  if(n1<=0) {
+    printf("Args error in cmd_d\n");
+    return 0;
+  }
+  int n2=free_wp(N);
+  if(n2==0) {
+    printf("Error:no watchpoint %d\n",N);
+  }
+  else {
+    printf("Success:the watchpoint %d has been deleted\n",N);
+  }
+  return 0;
+}
+
 static struct {
   char *name;
   char *description;
@@ -46,7 +148,12 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "si", "Args:[N];Execute N instructions step by step", cmd_si },
+  { "info", "Args:r/w;Print information about registers or watchpoint", cmd_info },
+  { "x", "Args:[N] [EXPR];Scan the memory", cmd_x },
+  { "p", "Args:expr", cmd_p },
+  { "w", "Args:expr;Set the watchpoint", cmd_w},
+  { "d", "Args:[N];Delete the N watchpoint", cmd_d},
   /* TODO: Add more commands */
 
 };
