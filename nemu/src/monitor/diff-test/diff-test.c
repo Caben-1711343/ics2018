@@ -149,8 +149,18 @@ void difftest_step(uint32_t eip) {
 
   // TODO: Check the registers state with QEMU.
   // Set `diff` as `true` if they are not the same.
-  TODO();
-
+  //TODO();
+  if(r.eax!=cpu.eax||r.ebx!=cpu.ebx||r.ecx!=cpu.ecx||r.edx!=cpu.edx
+     ||r.esp!=cpu.esp||r.ebp!=cpu.ebp||r.esi!=cpu.esi||r.edi!=cpu.edi) {
+    diff=true;
+    }
+  if(diff) {
+    Log("There is wrong when nemu.eip=0x%x",cpu.eip);
+    }//通用寄存器有问题
+  if(r.eip!=cpu.eip) {
+    diff=true;
+    Log("There are different between qemu.eip=0x%x and nemu.eip=0x%x",r.eip,cpu.eip);
+    }//eip 有问题
   if (diff) {
     nemu_state = NEMU_END;
   }
