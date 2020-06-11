@@ -44,6 +44,12 @@ typedef struct {
     unsigned int OF:1;
     unsigned int :20;
   } eflags;//实现eflags寄存器，注意是小端模式
+  
+  rtlreg_t cs;//cs寄存器
+  struct IDTR{//idtr寄存器
+    uint32_t base;
+    uint16_t limit;
+  }idtr;
 } CPU_state;
 
 extern CPU_state cpu;

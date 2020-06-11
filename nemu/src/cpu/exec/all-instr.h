@@ -103,3 +103,6 @@ make_EHelper(out);
 //时钟跑分
 make_EHelper(cwtl);
 make_EHelper(rol);
+
+//PA3
+make_EHelper(lidt);
