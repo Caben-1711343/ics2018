@@ -84,6 +84,7 @@ static inline void restart() {
   cpu.eip = ENTRY_START;
   unsigned int initial = 2;
   memcpy(&cpu.eflags,&initial,sizeof(cpu.eflags));//初始化eflags寄存器，设置为0x0000 0002H
+  cpu.cs = 0x8;
 
 #ifdef DIFF_TEST
   init_qemu_reg();
