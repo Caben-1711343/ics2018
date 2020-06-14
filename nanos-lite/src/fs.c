@@ -22,8 +22,14 @@ static Finfo file_table[] __attribute__((used)) = {
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
 
+//对文件记录表进行初始化
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  extern void get_screen(int* p_width,int* p_height);//外部引用声明
+  int width=0,height=0;
+  get_screen(&width,&height);//获取屏幕信息
+  file_table[FD_FB].size=width*height*sizeof(uint32_t);
+  Log("Set FD_FB size=%d",file_table[FD_FB].size);//辅助输出
 }
 
 
@@ -68,18 +74,26 @@ int fs_open(const char* filename,int flags,int mode) {
 }
 
 
+extern void dispinfo_read(void *buf, off_t offset, size_t len);
+extern void fb_write(const void *buf, off_t offset, size_t len);
 //读取文件，调用ramdisk_read()函数
 ssize_t fs_read(int fd,void* buf,size_t len) {
   assert(fd>=0 && fd<NR_FILES);//不能超过给定文件个数
-  if(fd<3) {
+  if(fd<3||fd==FD_FB) {
     panic("Wrong fd!");
     return 0;
   }
-  int n=fs_filesz(fd)-get_open_offset(fd);
+  int n=fs_filesz(fd)-get_open_offset(fd);//最多能读取多少字节
   if(n>len) {
     n=len;
   }
-  ramdisk_read(buf,disk_offset(fd)+get_open_offset(fd),n);
+  //ramdisk_read(buf,disk_offset(fd)+get_open_offset(fd),n);
+  if(fd==FD_DISPINFO) {
+    dispinfo_read(buf,get_open_offset(fd),n);
+  }
+  else {
+    ramdisk_read(buf,disk_offset(fd)+get_open_offset(fd),n);
+  }
   set_open_offset(fd,get_open_offset(fd)+n);//设置偏移量
   return n;
 }
@@ -92,7 +106,7 @@ int fs_close(int fd) {
 //参照fs_read
 ssize_t fs_write(int fd,void* buf,size_t len) {
   assert(fd>=0 && fd<NR_FILES);//不能超过给定文件个数
-  if(fd<3) {
+  if(fd<3||fd==FD_DISPINFO) {
     panic("Wrong fd!");
     return 0;
   }
@@ -100,7 +114,13 @@ ssize_t fs_write(int fd,void* buf,size_t len) {
   if(n>len) {
     n=len;
   }
-  ramdisk_write(buf,disk_offset(fd)+get_open_offset(fd),n);
+  //ramdisk_write(buf,disk_offset(fd)+get_open_offset(fd),n);
+  if(fd==FD_FB) {
+    fb_write(buf,get_open_offset(fd),n);
+  }
+  else {
+    ramdisk_write(buf,disk_offset(fd)+get_open_offset(fd),n);
+  }
   set_open_offset(fd,get_open_offset(fd)+n);//设置偏移量
   return n;
 }
