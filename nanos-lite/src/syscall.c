@@ -29,8 +29,6 @@ int sys_write(int fd,void* buf,size_t len) {
   return -1;
 }
 
-
-  
 _RegSet* do_syscall(_RegSet *r) {
   uintptr_t a[4];
   //获取系统调用参数
