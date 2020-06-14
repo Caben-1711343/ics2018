@@ -12,7 +12,7 @@ void sys_exit(int a) {
 int sys_write(int fd,void* buf,size_t len) {
   if(fd==1||fd==2) {//fd为1或2则执行
     char c;
-    Log("buffer:%s",(char*)buf);//用于比较
+    Log("buffer: %s",(char*)buf);//用于比较
     for(int i=0;i<len;i++) {
       memcpy(&c,buf+i,1);
       _putc(c);
@@ -26,6 +26,7 @@ int sys_write(int fd,void* buf,size_t len) {
 }
 
 int sys_brk(int addr) {
+  Log("SSSS");
   return 0;
 }
   
