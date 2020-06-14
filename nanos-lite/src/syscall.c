@@ -9,6 +9,10 @@ void sys_exit(int a) {
   _halt(a);
 }
 
+int sys_brk(int addr) {
+  return 0;
+}
+
 int sys_write(int fd,void* buf,size_t len) {
   if(fd==1||fd==2) {//fd为1或2则执行
     char c;
@@ -25,9 +29,7 @@ int sys_write(int fd,void* buf,size_t len) {
   return -1;
 }
 
-int sys_brk(int addr) {
-  return 0;
-}
+
   
 _RegSet* do_syscall(_RegSet *r) {
   uintptr_t a[4];
