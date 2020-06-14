@@ -49,7 +49,7 @@ int _read_key() {//检测按键
   }
 }
 //获取屏幕高度和宽度
-void get_screen(int* width,int* height) {
-  *width=_screen.width;
-  *height=_screen.height;
+void get_screen(int* p_width,int* p_height) {
+  *p_width=_screen.width;
+  *p_height=_screen.height;
 }
