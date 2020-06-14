@@ -89,6 +89,42 @@ int fs_close(int fd) {
   return 0;
 } 
 
+//参照fs_read
+ssize_t fs_write(int fd,void* buf,size_t len) {
+  assert(fd>=0 && fd<NR_FILES);//不能超过给定文件个数
+  if(fd<3) {
+    panic("Wrong fd!");
+    return 0;
+  }
+  int n=fs_filesz(fd)-get_open_offset(fd);
+  if(n>len) {
+    n=len;
+  }
+  ramdisk_write(buf,disk_offset(fd)+get_open_offset(fd),n);
+  set_open_offset(fd,get_open_offset(fd)+n);//设置偏移量
+  return n;
+}
+
+//移动位置
+off_t fs_lseek(int fd,off_t offset,int whence) {
+  switch(whence) {
+    case SEEK_SET:
+      set_open_offset(fd,offset);
+      return get_open_offset(fd);
+    case SEEK_CUR:
+      set_open_offset(fd,get_open_offset(fd)+offset);
+      return get_open_offset(fd);  
+    case SEEK_END:
+      set_open_offset(fd,fs_filesz(fd)+offset);
+      return get_open_offset(fd);
+    default:
+      panic("Unhandled whence ID = %d",whence);
+      return -1;
+  }
+}
+  
+  
+
 
 
 
