@@ -13,10 +13,10 @@ make_EHelper(lidt) {
     cpu.idtr.limit = vaddr_read(id_dest->addr,2);
     cpu.idtr.base = vaddr_read(id_dest->addr+2,4);
     }
-#ifdef DEBUG//打印测试信息
+/*#ifdef DEBUG//打印测试信息
   Log("idtr.limit=0x%x",cpu.idtr.limit);
   Log("idtr.base=0x%x",cpu.idtr.base);
-#endif
+#endif*/
 
   print_asm_template1(lidt);
 }
