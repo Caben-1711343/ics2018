@@ -47,6 +47,7 @@ int sys_close(int fd) {
 }
 
 int sys_lseek(int fd,off_t offset,int whence) {
+  Log("SSSSSSSSS!");
   return fs_lseek(fd,offset,whence);
 }
 
