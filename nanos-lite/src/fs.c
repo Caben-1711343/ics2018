@@ -88,7 +88,7 @@ int fs_close(int fd) {
   assert(fd>=0 && fd<NR_FILES);//不能超过给定文件个数
   return 0;
 } 
-
+/*
 //参照fs_read
 ssize_t fs_write(int fd,void* buf,size_t len) {
   assert(fd>=0 && fd<NR_FILES);//不能超过给定文件个数
@@ -122,6 +122,7 @@ off_t fs_lseek(int fd,off_t offset,int whence) {
       return -1;
   }
 }
+*/
   
   
 
