@@ -76,9 +76,13 @@ int fs_open(const char* filename,int flags,int mode) {
 
 extern void dispinfo_read(void *buf, off_t offset, size_t len);
 extern void fb_write(const void *buf, off_t offset, size_t len);
+extern size_t events_read(void *buf, size_t len);
 //读取文件，调用ramdisk_read()函数
 ssize_t fs_read(int fd,void* buf,size_t len) {
   assert(fd>=0 && fd<NR_FILES);//不能超过给定文件个数
+  if(fd==FD_EVENTS) {
+    return events_read(buf,len);//传入字节数为len，读取输入设备
+  }
   if(fd<3||fd==FD_FB) {
     panic("Wrong fd!");
     return 0;
