@@ -33,14 +33,15 @@ int _write(int fd, void *buf, size_t count){
 void *_sbrk(intptr_t increment){
   extern end;
   static uintptr_t probreak=(uintptr_t)&end;//静态变量初始化
-  uintptr_t n_probreak=probreak+increment;
-  int r=_syscall_(SYS_brk,n_probreak,0,0);
+  uintptr_t probreak_new=probreak+increment;
+  int r= _syscall_(SYS_brk,probreak_new,0,0);
   if(r==0) {
     uintptr_t temp=probreak;
-    probreak=n_probreak;//更新
+    probreak=probreak_new;//更新
     Log("Successfully!");
     return (void*)temp;
   }
+  Log("fail!");
   return (void *)-1;
 }
 
