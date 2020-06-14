@@ -36,10 +36,11 @@ void *_sbrk(intptr_t increment){
   uintptr_t n_probreak=probreak+increment;
   int r=_syscall_(SYS_brk,n_probreak,0,0);
   if(r==0) {
-    uintptr_t temp=probreak;//
+    uintptr_t temp=probreak;
     probreak=n_probreak;//更新
     return (void*)temp;
   }
+  Log("Fali!");
   return (void *)-1;
 }
 
