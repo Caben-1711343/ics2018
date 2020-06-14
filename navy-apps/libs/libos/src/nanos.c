@@ -38,9 +38,9 @@ void *_sbrk(intptr_t increment){
   if(r==0) {
     uintptr_t temp=probreak;
     probreak=n_probreak;//更新
+    Log("Successfully!");
     return (void*)temp;
   }
-  Log("Fali!");
   return (void *)-1;
 }
 
