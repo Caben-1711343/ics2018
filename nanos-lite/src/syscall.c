@@ -26,7 +26,6 @@ int sys_write(int fd,void* buf,size_t len) {
 }
 
 int sys_brk(int addr) {
-  Log("SSSS");
   return 0;
 }
   
