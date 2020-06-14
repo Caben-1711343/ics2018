@@ -30,7 +30,7 @@ int _write(int fd, void *buf, size_t count){
   return _syscall_(SYS_write,fd,(uintptr_t)buf,count);
 }
 
-/*void *_sbrk(intptr_t increment){
+void *_sbrk(intptr_t increment){
   extern end;
   static uintptr_t probreak=(uintptr_t)&end;//静态变量初始化
   uintptr_t probreak_new=probreak+increment;
@@ -43,7 +43,7 @@ int _write(int fd, void *buf, size_t count){
   }
   Log("fail!");
   return (void *)-1;
-}*/
+}
 
 int _read(int fd, void *buf, size_t count) {
   _exit(SYS_read);
