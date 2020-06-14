@@ -20,20 +20,20 @@ int sys_write(int fd,void* buf,size_t len) {
     }
     return len;
   }
-  else {//否则返回错误
-    panic("Unhandled fd=%d in sys_write",fd);
-  }
-  //if(fd>=3) {
-    //return fs_write(fd,buf,len);
+  //else {//否则返回错误
+  //  panic("Unhandled fd=%d in sys_write",fd);
   //}
-  //panic("Unhandled fd=%d in sys_write",fd);
+  if(fd>=3) {
+    return fs_write(fd,buf,len);
+  }
+  panic("Unhandled fd=%d in sys_write",fd);
   return -1;
 }
 
 int sys_brk(int addr) {
   return 0;
 }
-/*
+
 int sys_open(const char* filename) {
   return fs_open(filename,0,0);
 }
@@ -49,7 +49,7 @@ int sys_close(int fd) {
 int sys_lseek(int fd,off_t offset,int whence) {
   return fs_lseek(fd,offset,whence);
 }
-*/
+
 _RegSet* do_syscall(_RegSet *r) {
   uintptr_t a[4];
   //获取系统调用参数
@@ -63,10 +63,10 @@ _RegSet* do_syscall(_RegSet *r) {
     case SYS_exit: sys_exit(a[1]); break;
     case SYS_write: SYSCALL_ARG1(r)=sys_write(a[1],(void*)a[2],a[3]);break;
     case SYS_brk: SYSCALL_ARG1(r)=sys_brk(a[1]);break;
-    //case SYS_open: SYSCALL_ARG1(r)=sys_open((char*)a[1]);break;
-    //case SYS_read: SYSCALL_ARG1(r)=sys_read(a[1],(void*)a[2],a[3]);break;
-    //case SYS_close: SYSCALL_ARG1(r)=sys_close(a[1]);break;
-    //case SYS_lseek: SYSCALL_ARG1(r)=sys_lseek(a[1],a[2],a[3]);break;
+    case SYS_open: SYSCALL_ARG1(r)=sys_open((char*)a[1]);break;
+    case SYS_read: SYSCALL_ARG1(r)=sys_read(a[1],(void*)a[2],a[3]);break;
+    case SYS_close: SYSCALL_ARG1(r)=sys_close(a[1]);break;
+    case SYS_lseek: SYSCALL_ARG1(r)=sys_lseek(a[1],a[2],a[3]);break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
