@@ -36,7 +36,7 @@ void *_sbrk(intptr_t increment){
   static uintptr_t probreak=(uintptr_t)&end;//静态变量初始化
   uintptr_t probreak_new=probreak+increment;
   int r= _syscall_(SYS_brk,probreak_new,0,0);
-  if(r==0) {
+  if(r==0) {//若系统调用成功，返回值为0
     uintptr_t temp=probreak;
     probreak=probreak_new;//更新
     return (void*)temp;

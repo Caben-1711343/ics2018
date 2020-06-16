@@ -59,7 +59,7 @@ void fb_write(const void *buf, off_t offset, size_t len) {
     _draw_rect(buf+tempx*4,0,screen_y2,len/4-tempx,1);
     return;
   }
-  
+  //三行及以上调用三次_drac_rect
   _draw_rect(buf,screen_x1,screen_y1,tempx,1);
   int tempy=screen_y2-screen_y1-1;
   _draw_rect(buf+tempx*4,0,screen_y1+1,width,tempy);

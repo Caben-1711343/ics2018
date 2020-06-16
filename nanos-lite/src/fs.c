@@ -115,7 +115,7 @@ ssize_t fs_write(int fd,void* buf,size_t len) {
     return 0;
   }
   int n=fs_filesz(fd)-get_open_offset(fd);
-  if(n>len) {
+  if(n>len) {//大于文件长度则最多只能写文件长度个字节
     n=len;
   }
   //ramdisk_write(buf,disk_offset(fd)+get_open_offset(fd),n);
@@ -132,13 +132,13 @@ ssize_t fs_write(int fd,void* buf,size_t len) {
 //移动位置
 off_t fs_lseek(int fd,off_t offset,int whence) {
   switch(whence) {
-    case SEEK_SET:
+    case SEEK_SET://文件开始
       set_open_offset(fd,offset);
       return get_open_offset(fd);
     case SEEK_CUR:
       set_open_offset(fd,get_open_offset(fd)+offset);
       return get_open_offset(fd);  
-    case SEEK_END:
+    case SEEK_END://文件末尾
       set_open_offset(fd,fs_filesz(fd)+offset);
       return get_open_offset(fd);
     default:
