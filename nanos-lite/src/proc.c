@@ -33,11 +33,12 @@ void switch_current_game() {
   Log("current_game=%d",current_game);
 }
 _RegSet* schedule(_RegSet *prev) {
-  if(current!=NULL) {
-    current->tf=prev;//保存现场
+   /*
+   if(current!=NULL) {
+     current->tf=prev;//保存现场
    }
    else {
-    current=&pcb[0];//初始进程
+     current=&pcb[0];//初始进程
    }
    
    static int N=0;
@@ -52,7 +53,27 @@ _RegSet* schedule(_RegSet *prev) {
      current=&pcb[1];
      N=0;
    }
+   */
    //current=(current==&pcb[0]?&pcb[1]:&pcb[0]);
+   if(current!=NULL) {
+    current->tf=prev;//保存现场
+   }
+   else {
+    current=&pcb[current_game];//初始进程
+   }
+   
+   static int N=0;
+   static const int frequency=1000;
+   if(current==&pcb[current_game]) {//若当前运行的是仙剑/videotest，则记录运行次数
+     N++;
+   }
+   else {
+     current=&pcb[current_game];
+   }
+   if(N==frequency) {
+     current=&pcb[1];
+     N=0;
+   }
    _switch(&current->as);//切换地址空间
    return current->tf;//新进程上下文
 }
