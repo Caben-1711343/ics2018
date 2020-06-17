@@ -315,7 +315,7 @@ make_DHelper(mov_load_cr) {
   //加载CR0并存到某个通用寄存器
   rtl_load_cr(&id_src->val,id_src->reg);
 #ifdef DEBUG
-  sprintf(id_dest->str, 5,"%%cr%d",id_dest->reg);
+  snprintf(id_dest->str, 5,"%%cr%d",id_dest->reg);
 #endif
 }
 
@@ -323,7 +323,7 @@ make_DHelper(mov_store_cr) {
    //将通用寄存器的值存到CR寄存器中
    decode_op_rm(eip,id_src,true,id_dest,false);
 #ifdef DEBUG
-  sprintf(id_dest->str, 5,"%%cr%d",id_dest->reg);
+  snprintf(id_dest->str, 5,"%%cr%d",id_dest->reg);
 #endif
 }
 
