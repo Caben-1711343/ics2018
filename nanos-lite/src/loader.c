@@ -6,7 +6,6 @@
 
 extern void ramdisk_read(void *buf,off_t offset,size_t len);
 extern size_t get_ramdisk_size();//外部声明
-extern void* new_page(void);
 
 uintptr_t loader(_Protect *as, const char *filename) {
   //TODO();
