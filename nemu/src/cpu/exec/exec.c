@@ -252,6 +252,7 @@ void exec_wrapper(bool print_flag) {
     cpu.INTR=false;
     extern void raise_intr(uint8_t NO,vaddr_t ret_addr);
     raise_intr(TIME_IRQ,cpu.eip);
+    update_eip();
   }
 
   update_eip();
