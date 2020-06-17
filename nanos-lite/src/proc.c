@@ -26,6 +26,12 @@ void load_prog(const char *filename) {
   pcb[i].tf = _umake(&pcb[i].as, stack, stack, (void *)entry, NULL, NULL);
 }
 
+int current_game = 0;
+
+void switch_current_game() {
+  current_game=2-current_game;//0仙剑，1hello，2videotest
+  Log("current_game=%d",current_game);
+}
 _RegSet* schedule(_RegSet *prev) {
   if(current!=NULL) {
     current->tf=prev;//保存现场
@@ -33,7 +39,7 @@ _RegSet* schedule(_RegSet *prev) {
    else {
     current=&pcb[0];//初始进程
    }
-   //current=&pcb[0];//切换进程
+   
    static int N=0;
    static const int frequency=1000;
    if(current==&pcb[0]) {//若当前运行的是仙剑，则记录运行次数
