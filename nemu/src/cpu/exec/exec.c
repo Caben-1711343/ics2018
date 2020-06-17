@@ -248,6 +248,8 @@ void exec_wrapper(bool print_flag) {
 #ifdef DIFF_TEST
   uint32_t eip = cpu.eip;
 #endif
+
+  update_eip();
   if(cpu.INTR & cpu.eflags.IF) {//开中断并接收到中断信号
     cpu.INTR=false;
     extern void raise_intr(uint8_t NO,vaddr_t ret_addr);
@@ -255,7 +257,7 @@ void exec_wrapper(bool print_flag) {
     update_eip();
   }
 
-  //update_eip();
+
 
 #ifdef DIFF_TEST
   void difftest_step(uint32_t);
