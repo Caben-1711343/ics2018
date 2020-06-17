@@ -5,8 +5,8 @@ extern _RegSet* schedule(_RegSet *prev);
 static _RegSet* do_event(_Event e, _RegSet* r) {
   switch (e.event) {
     case _EVENT_SYSCALL://调用do_syscall()函数
-      do_syscall(r);
-      return schedule(r);//进程切换
+      return do_syscall(r);
+      //return schedule(r);//进程切换
     case _EVENT_TRAP:
       printf("Receive an event trap!!!\n");
       return schedule(r);//切换进程
@@ -16,7 +16,7 @@ static _RegSet* do_event(_Event e, _RegSet* r) {
     default: panic("Unhandled event ID = %d", e.event);
   }
 
-  return NULL;
+  return r;
 }
 
 void init_irq(void) {
