@@ -1,5 +1,6 @@
 #include "common.h"
 #include "fs.h"
+#include "memory.h"
 
 #define DEFAULT_ENTRY ((void *)0x8048000)
 
