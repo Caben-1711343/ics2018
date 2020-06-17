@@ -15,7 +15,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   rtl_li(&t0,ret_addr);
   rtl_push(&t0);
   
-  Log("%d",NO);
+  Log("%x",NO);
   //寻找IDT对应NO的门描述符首地址
   vaddr_t gate_addr=cpu.idtr.base+NO*sizeof(GateDesc);//根据索引找到门描述
  
