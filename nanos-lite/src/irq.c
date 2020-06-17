@@ -7,9 +7,9 @@ static _RegSet* do_event(_Event e, _RegSet* r) {
     case _EVENT_SYSCALL://调用do_syscall()函数
       do_syscall(r);
       return schedule(r);//进程切换
-    case _EVENT_TRAP:
-      printf("Receive an event trap!!!\n");
-      return schedule(r);//切换进程
+    //case _EVENT_TRAP:
+      //printf("Receive an event trap!!!\n");
+      //return schedule(r);//切换进程
     case _EVENT_IRQ_TIME://时钟中断
       Log("Receive an event:IRQ_TIME");
       return schedule(r);
