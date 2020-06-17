@@ -79,15 +79,17 @@ uint32_t vaddr_read(vaddr_t addr, int len) {
   if(PTE_ADDR(addr) != PTE_ADDR(addr+len-1)) {//检查数据是否跨页
     //printf("Error:The data passes two pages:addr=0x%x,len=%d!\n",addr,len);
     //assert(0);
-    int num1=0x1000-OFF(addr);//第一页字节数
-    int num2=len-num1;//第二页字节数
+    int byte1=0x1000-OFF(addr);//第一页字节数
+    int byte2=len-byte1;//第二页字节数
+    //第一页
     paddr_t paddr1=page_translate(addr,false);
-    paddr_t paddr2=page_translate(addr+num1,false);
+    //第二页
+    paddr_t paddr2=page_translate(addr+byte1,false);
+    //读取两个页面的字节并整合
+    uint32_t low=paddr_read(paddr1,byte1);
+    uint32_t high=paddr_read(paddr2,byte2);
     
-    uint32_t low=paddr_read(paddr1,num1);
-    uint32_t high=paddr_read(paddr2,num2);
-    
-    uint32_t result=high<<(num1*8)|low;
+    uint32_t result=high<<(byte1*8)|low;
     return result;
   }
   else {
@@ -101,15 +103,17 @@ void vaddr_write(vaddr_t addr, int len, uint32_t data) {
   if(PTE_ADDR(addr) != PTE_ADDR(addr+len-1)) {//检查数据是否跨页
     //printf("Error:The data passes two pages:addr=0x%x,len=%d!\n",addr,len);
     //assert(0);
-    int num1=0x1000-OFF(addr);//第一页字节数
-    int num2=len-num1;//第二页字节数
+    int byte1=0x1000-OFF(addr);//第一页字节数
+    int byte2=len-byte1;//第二页字节数
     paddr_t paddr1=page_translate(addr,true);
-    paddr_t paddr2=page_translate(addr+num1,true);
-    uint32_t low=data & (~0u>>((4-num1)<<3));
-    uint32_t high=data>>((4-num2)<<3);
+    paddr_t paddr2=page_translate(addr+byte1,true);
     
-    paddr_write(paddr1,num1,low);
-    paddr_write(paddr2,num2,high);
+    //将数据分别写入两个页面
+    uint32_t low=data & (~0u>>((4-byte1)<<3));
+    uint32_t high=data>>((4-byte2)<<3);
+    
+    paddr_write(paddr1,byte1,low);
+    paddr_write(paddr2,byte2,high);
     return;
   }
   else {
