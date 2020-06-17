@@ -67,7 +67,7 @@ paddr_t page_translate(vaddr_t addr,bool iswrite) {
     
     //物理页内偏移
     paddr_t paddr=PTE_ADDR(pte.val) | OFF(addr);
-    printf("vaddr=0x%x,paddr=0x%x\n",addr,paddr);
+    //printf("vaddr=0x%x,paddr=0x%x\n",addr,paddr);
     return paddr;
   }
   
