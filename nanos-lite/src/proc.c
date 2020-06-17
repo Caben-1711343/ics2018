@@ -48,5 +48,6 @@ _RegSet* schedule(_RegSet *prev) {
    }
    //current=(current==&pcb[0]?&pcb[1]:&pcb[0]);
    _switch(&current->as);//切换地址空间
+   printf("开始切换！");
    return current->tf;//新进程上下文
 }
