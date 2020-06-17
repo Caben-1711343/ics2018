@@ -252,11 +252,10 @@ void exec_wrapper(bool print_flag) {
     cpu.INTR=false;
     extern void raise_intr(uint8_t NO,vaddr_t ret_addr);
     raise_intr(TIME_IRQ,cpu.eip);
-    Log("SSSS!");
     update_eip();
   }
 
-  update_eip();
+  //update_eip();
 
 #ifdef DIFF_TEST
   void difftest_step(uint32_t);
