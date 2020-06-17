@@ -35,6 +35,6 @@ int main() {
   extern void load_prog(const char *filename);
   load_prog("/bin/pal");
   load_prog("/bin/hello");
-  _trap();//内核自陷
+  //_trap();//内核自陷
   panic("Should not reach here");
 }
