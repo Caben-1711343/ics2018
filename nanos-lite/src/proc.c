@@ -30,7 +30,7 @@ _RegSet* schedule(_RegSet *prev) {
   if(current!=NULL) {
     current->tf=prev;//保存现场
    }
-   /*else {
+   else {
     current=&pcb[0];//初始进程
    }
    //current=&pcb[0];//切换进程
@@ -45,8 +45,8 @@ _RegSet* schedule(_RegSet *prev) {
    if(N==frequency) {
      current=&pcb[1];
      N=0;
-   }*/
-   current=(current==&pcb[0]?&pcb[1]:&pcb[0]);
+   }
+   //current=(current==&pcb[0]?&pcb[1]:&pcb[0]);
    _switch(&current->as);//切换地址空间
    return current->tf;//新进程上下文
 }
