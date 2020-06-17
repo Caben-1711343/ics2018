@@ -251,6 +251,7 @@ void exec_wrapper(bool print_flag) {
   if(cpu.INTR & cpu.eflags.IF) {//开中断并接受到中断信号
     cpu.INTR=false;
     extern void raise_intr(uint8_t NO,vaddr_t ret_addr);
+    Log("SSSS!");
     raise_intr(TIME_IRQ,cpu.eip);
     update_eip();
   }
