@@ -66,6 +66,19 @@ void _switch(_Protect *p) {
 }
 
 void _map(_Protect *p, void *va, void *pa) {
+  if(OFF(va) || OFF(pa)) {
+  return;
+  }
+  PDE *pgdir=(PDE*)p->ptr;//页目录表基址
+  PTE *pgtable=NULL;//二级页表首地址
+  PDE *pde=pgdir+PDX(va);
+  if(!(*pde&PTE_P)) {
+    pgtable=(PTE*)(palloc_f());//不存在对应二级页表则申请新页
+    *pde=(uintptr_t)pgtable | PTE_P;
+  }
+  pgtable=(PTE*)PTE_ADDR(*pde);//获取二级页表首地址
+  PTE *pte=pgtable+PTX(va);
+  *pte=(uintptr_t)pa | PTE_P;//添加映射
 }
 
 void _unmap(_Protect *p, void *va) {
