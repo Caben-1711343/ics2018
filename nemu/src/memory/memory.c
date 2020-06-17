@@ -77,7 +77,7 @@ paddr_t page_translate(vaddr_t addr,bool iswrite) {
 uint32_t vaddr_read(vaddr_t addr, int len) {
   //return paddr_read(addr, len);
   if(PTE_ADDR(addr) != PTE_ADDR(addr+len-1)) {//检查数据是否跨页
-    printf("Error:The data passes two pages!");
+    printf("Error:The data passes two pages:addr=0x%x,len=%d!\n",addr,len);
     assert(0);
   }
   else {
@@ -89,7 +89,7 @@ uint32_t vaddr_read(vaddr_t addr, int len) {
 void vaddr_write(vaddr_t addr, int len, uint32_t data) {
   //paddr_write(addr, len, data);
   if(PTE_ADDR(addr) != PTE_ADDR(addr+len-1)) {//检查数据是否跨页
-    printf("Error:The data passes two pages!");
+    printf("Error:The data passes two pages:addr=0x%x,len=%d!\n",addr,len);
     assert(0);
   }
   else {
