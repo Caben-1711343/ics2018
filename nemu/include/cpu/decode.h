@@ -112,4 +112,8 @@ make_DHelper(in_dx2a);
 make_DHelper(out_a2I);
 make_DHelper(out_a2dx);
 
+//对CR0和CR3进行操作
+make_DHelper(mov_load_cr);
+make_DHelper(mov_store_cr);
+
 #endif

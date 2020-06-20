@@ -13,6 +13,8 @@ typedef struct {
 #define EX(ex)             EXW(ex, 0)
 #define EMPTY              EX(inv)
 
+#define TIME_IRQ           32//时钟中断
+
 static inline void set_width(int width) {
   if (width == 0) {
     width = decoding.is_operand_size_16 ? 2 : 4;
@@ -148,7 +150,7 @@ opcode_entry opcode_table [512] = {
   /* 0x14 */	EMPTY, EMPTY, EMPTY, EMPTY,
   /* 0x18 */	EMPTY, EMPTY, EMPTY, EMPTY,
   /* 0x1c */	EMPTY, EMPTY, EMPTY, EMPTY,
-  /* 0x20 */	EMPTY, EMPTY, EMPTY, EMPTY,
+  /* 0x20 */	IDEX(mov_load_cr,mov), EMPTY, IDEX(mov_store_cr,mov_store_cr), EMPTY,
   /* 0x24 */	EMPTY, EMPTY, EMPTY, EMPTY,
   /* 0x28 */	EMPTY, EMPTY, EMPTY, EMPTY,
   /* 0x2c */	EMPTY, EMPTY, EMPTY, EMPTY,
@@ -248,6 +250,14 @@ void exec_wrapper(bool print_flag) {
 #endif
 
   update_eip();
+  if(cpu.INTR & cpu.eflags.IF) {//开中断并接收到中断信号
+    cpu.INTR=false;
+    extern void raise_intr(uint8_t NO,vaddr_t ret_addr);
+    raise_intr(TIME_IRQ,cpu.eip);
+    update_eip();
+  }
+
+
 
 #ifdef DIFF_TEST
   void difftest_step(uint32_t);

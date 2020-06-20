@@ -50,6 +50,9 @@ typedef struct {
     uint32_t base;
     uint16_t limit;
   }idtr;
+  uint32_t CR0;//CR0寄存器，只用到最高位PG
+  uint32_t CR3;//CR3寄存器，只用高20位
+  bool INTR;
 } CPU_state;
 
 extern CPU_state cpu;

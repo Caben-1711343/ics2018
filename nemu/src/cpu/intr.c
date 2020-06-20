@@ -10,12 +10,14 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   memcpy(&t1,&cpu.eflags,sizeof(cpu.eflags));
   rtl_li(&t0,t1);
   rtl_push(&t0);
+  cpu.eflags.IF=0;//关中断
   rtl_push(&cpu.cs);
   rtl_li(&t0,ret_addr);
   rtl_push(&t0);
   
   //寻找IDT对应NO的门描述符首地址
-  vaddr_t gate_addr=cpu.idtr.base+NO*sizeof(GateDesc);//根据索引找到门描述符
+  vaddr_t gate_addr=cpu.idtr.base+NO*sizeof(GateDesc);//根据索引找到门描述
+ 
   assert(gate_addr<=cpu.idtr.base+cpu.idtr.limit);
   
   //读取偏移量
@@ -30,4 +32,5 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
 }
 
 void dev_raise_intr() {
+  cpu.INTR=true;
 }

@@ -63,6 +63,8 @@ static int cmd_info(char *args) {
     for(i=0;i<8;i++) { printf("%s, 0x%x\n",regsl[i],reg_l(i)); }//32-bits registers
     for(i=0;i<8;i++) { printf("%s, 0x%x\n",regsw[i],reg_w(i)); }//16-bits registers
     for(i=0;i<8;i++) { printf("%s, 0x%x\n",regsb[i],reg_b(i)); }//8-bits registers
+    printf("eflags:CF=%d,ZF=%d,SF=%d,IF=%d,OF=%d\n",cpu.eflags.CF,cpu.eflags.ZF,cpu.eflags.SF,cpu.eflags.IF,cpu.eflags.OF);
+    printf("CR0=0x%x,CR3=0x%x\n",cpu.CR0,cpu.CR3);
     return 0;
   }
   else if(*args=='w') {
